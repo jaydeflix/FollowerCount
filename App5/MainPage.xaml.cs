@@ -44,10 +44,16 @@ namespace App5
         public string handleCleanup(string handle)
         {
             string urlPattern = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/[A-Za-z0-9_]{1,15}";
+            string urlPatternTooLong = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/[A-Za-z0-9_]{16,}";
+            string urlPatternHandleOnly = @"^[@A-Za-z0-9_]{1,15}$";
             if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPattern))
                 return handle;
-            else
+            else if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPatternTooLong))
+                return handle;
+            else if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPatternHandleOnly))
                 return "https://www.twitter.com/" + handle;
+            else
+                return "what?";
         }
     }
 }
