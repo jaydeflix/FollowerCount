@@ -31,10 +31,23 @@ namespace App5
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            int i = textBoxHandleList.Text.Split('\n').Length;
-            int numLines = textBoxHandleList.Text.Length - textBoxHandleList.Text.Replace(Environment.NewLine, string.Empty).Length;
-            var dialog = new MessageDialog(i.ToString() + "-" + numLines.ToString());
-            await dialog.ShowAsync();
+            int i = textBoxHandleList.Text.Split('\r').Length;
+
+            String[] subHandles = textBoxHandleList.Text.Split('\r');
+            foreach (var subHandle in subHandles)
+            {
+                string msg = handleCleanup(subHandle);
+                var dialog = new MessageDialog(msg);
+                await dialog.ShowAsync();
+            }
+        }
+        public string handleCleanup(string handle)
+        {
+            string urlPattern = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/[A-Za-z0-9_]{1,15}";
+            if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPattern))
+                return handle;
+            else
+                return "https://www.twitter.com/" + handle;
         }
     }
 }
