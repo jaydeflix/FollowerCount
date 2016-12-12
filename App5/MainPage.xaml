@@ -8,7 +8,7 @@
     mc:Ignorable="d" Width="2240">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
-        <TextBox x:Name="textBoxHandleList" HorizontalAlignment="Left" Height="143" Margin="226,62,0,0" TextWrapping="Wrap" Text="http://www.twitter.com/jaydeflix&#xD;&#xA;https://www.twitter.com/cnn&#xD;&#xA;http://twitter.com/msnbc&#xD;&#xA;https://twitter.com/msnbc&#xD;&#xA;microsoft&#xD;&#xA;@Microsoft" VerticalAlignment="Top" Width="592"/>
+        <TextBox x:Name="textBoxHandleList" HorizontalAlignment="Left" Height="143" Margin="226,62,0,0" TextWrapping="Wrap" Text="http://www.twitter.com/jaydeflix&#xD;&#xA;https://www.twitter.com/cnn&#xD;&#xA;http://twitter.com/msnbc&#xD;&#xA;https://twitter.com/msnbc&#xD;&#xA;microsoft&#xD;&#xA;@Microsoft" VerticalAlignment="Top" Width="592" TextChanged="textBoxHandleList_TextChanged"/>
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Height="40" Margin="661,248,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="0.5,-3" Click="button_Click"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="104" Margin="52,248,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="484">
             <Run Text="1) Paste either full urls or simple twitter handles into the text box."/>
