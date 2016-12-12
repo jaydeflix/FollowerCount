@@ -43,10 +43,15 @@ namespace App5
         }
         public string handleCleanup(string handle)
         {
-            string urlPattern = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/[A-Za-z0-9_]{1,15}";
-            if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPattern))
+            string urlPatternGood = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/[A-Za-z0-9_]{1,15}";
+            string urlPatternLongHandle = @"http(\:|s\:)\/\/(www\.twitter\.com|twitter\.com)\/@([A-Za-z0-9_]+){16,}|([A-Za-z0-9_]+){16,}";
+            string urlPatternGoodHandle = @"^@([A-Za-z0-9_]+){1,15}|([A-Za-z0-9_]+){1,15}";
+            string urlPatternBadHandle = @"^(@[A-Za-z0-9_]+){16,}|([A-Za-z0-9_]+){16,}";
+            if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPatternGood))
                 return handle;
-            else
+            else if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPatternLongHandle))
+                return "Sorry, but " + handle + "is not a valid twitter link.";
+            else if (System.Text.RegularExpressions.Regex.IsMatch(handle, urlPatternGoodHandle))
                 return "https://www.twitter.com/" + handle;
         }
     }
