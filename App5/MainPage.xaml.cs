@@ -4,18 +4,23 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Net;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
-
+using Windows.Web;
+using Windows.Web.Http;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using HtmlAgilityPack;
+using System.Threading.Tasks;
+
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -46,6 +51,7 @@ namespace App5
                     outputHandles = outputHandles + pageScrape(msg) + '\r';
 
             }
+            textBoxHandleList.Text = outputHandles;
         }
         public string handleCleanup(string handle)
         {
@@ -64,13 +70,41 @@ namespace App5
             else
                 return "Sorry, but " + handle + "is not recognized as a valid twitter connection";
         }
-        public string pageScrape(string url)
+        public async Task<string> pageScrape(string url)
         {
             //http://dejanstojanovic.net/aspnet/2015/april/scraping-website-content-using-htmlagilitypack/ and https://www.codeproject.com/articles/659019/scraping-html-dom-elements-using-htmlagilitypack-h
             string target = url;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(target);
-            HttpWebResponse response = (HttpWebResponse)request.BeginGetResponse();
-            return "blah";
+            System.Uri twitterURL = new System.Uri(target);
+            string returnValues = target + ',' + twitterURL.AbsolutePath.ToString() ;
+            var uri = new Uri(target);
+            var httpClient = new HttpClient();
+
+            // Always catch network exceptions for async methods
+            try
+            {
+                var result = await httpClient.GetStringAsync(uri);
+                Match followingCount = System.Text.RegularExpressions.Regex.Match(result, @"title\=\""([0-9,].*) Following");
+                Match followerCount = System.Text.RegularExpressions.Regex.Match(result, @"title\=\""([0-9,].*) Followers");
+                returnValues = returnValues + followingCount.ToString() + "," + followerCount.ToString();
+
+
+                //title="3,280 Following" 
+                //title="230,745 Followers" 
+
+            }
+            catch
+            {
+                // Details in ex.Message and ex.HResult.       
+            }
+
+            // Once your app is done using the HttpClient object call dispose to 
+            // free up system resources (the underlying socket and memory used for the object)
+            httpClient.Dispose();
+
+
+
+
+            return returnValues;
         }
     }
 }
